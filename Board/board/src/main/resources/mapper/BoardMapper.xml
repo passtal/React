@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aloha.board.board.DAO.BoardMapper">
+
+    <select id="list" resultType="Boards">
+        SELECT *
+        FROM boards
+        ORDER BY no DESC
+    </select>
+
+    <select id="select" resultType="Boards">
+        SELECT *
+        FROM boards
+        WHERE no = #{no}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO boards (id, title, writer, content)
+        VALUES (#{id}, #{title}, #{writer}, #{content} )
+    </insert>
+
+    <update id="update">
+        UPDATE boards
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="writer != null">
+                writer = #{writer},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+                updated_at = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM boards
+        WHERE no = #{no}
+    </delete>
+
+    
+</mapper>
