@@ -1,4 +1,4 @@
--- Active: 1765956701887@@127.0.0.1@3306@aloha
+-- Active: 1767915726149@@127.0.0.1@3306@aloha
 DROP TABLE IF EXISTS `todos`;
 
 CREATE TABLE `todos` (
@@ -10,3 +10,18 @@ CREATE TABLE `todos` (
 	`created_at`	TIMESTAMP	NOT NULL	DEFAULT current_timestamp	COMMENT '등록일자',
 	`updated_at`	TIMESTAMP	NOT NULL	DEFAULT current_timestamp	COMMENT '수정일자'
 );
+
+--  샘플 데이터
+
+TRUNCATE todos;
+
+INSERT INTO `todos` (id, name, status)
+VALUES
+(UUID(), '할 일 샘플 데이터 1', true),
+(UUID(), '할 일 샘플 데이터 2', false),
+(UUID(), '할 일 샘플 데이터 3', false),
+(UUID(), '할 일 샘플 데이터 4', false),
+(UUID(), '할 일 샘플 데이터 5', true)
+;
+
+SELECT * FROM todos;

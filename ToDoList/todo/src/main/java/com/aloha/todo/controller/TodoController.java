@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +25,15 @@ import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// 모든 출처(Origin)허용
+// @CrossOrigin("*")
+// 💬 특정 출처 허용 - 3000, 5173
+@CrossOrigin(
+    origins = {
+        "http://localhost:3000",
+        "http://localhost:5173"
+    }
+)
 @Slf4j
 @RestController
 @RequestMapping("/todos")
@@ -107,6 +117,35 @@ public class TodoController {
       } catch (Exception e) {
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
       }
+  }
+
+  @PutMapping("/bulk")
+  public ResponseEntity<?> completeAll() {
+      try {
+        boolean result = todoService.completeAll();
+        if (result) 
+            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+      } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      
+  }
+
+  // 전체 삭제
+  @DeleteMapping("/bulk")
+  public ResponseEntity<?> deleteAll() {
+      try {
+        boolean result = todoService.deleteAll();
+        if (result) 
+            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+      } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      
   }
 
 }
