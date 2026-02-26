@@ -27,18 +27,37 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public boolean insert(Boards board) {
-        return boardMapper.insert(board) > 0;
+        int result = boardMapper.insert(board);
+        return result > 0;
     }
 
     @Override
     public boolean update(Boards board) {
-        return boardMapper.update(board) > 0;
+        int result = boardMapper.update(board);
+        return result > 0;
     }
 
     @Override
     public boolean delete(Long no) {
-        return boardMapper.delete(no) > 0;
+        int result = boardMapper.delete(no);
+        return result > 0;
     }
 
+    @Override
+    public Boards selectById(String id) {
+        return boardMapper.selectById(id);
+    }
+
+    @Override
+    public boolean updateById(Boards board) {
+        int result = boardMapper.updateById(board);
+        return result > 0;
+    }
+
+    @Override
+    public boolean deleteById(String id) {
+        int result = boardMapper.deleteById(id);
+        return result > 0;
+    }
     
 }

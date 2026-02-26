@@ -5,24 +5,59 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.aloha.board.board.DAO.BoardMapper">
 
-    <select id="list" resultType="Boards">
+    <!-- resultMap -->
+    <resultMap type="Boards" id="BoardMap">
+        <id property="no" column="no" />
+        <result property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="writer" column="writer" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <select id="list" resultMap="BoardMap">
         SELECT *
         FROM boards
         ORDER BY no DESC
     </select>
 
-    <select id="select" resultType="Boards">
+    <select id="select" resultMap="BoardMap">
         SELECT *
         FROM boards
         WHERE no = #{no}
     </select>
 
-    <insert id="insert">
+    <select id="selectById" resultMap="BoardMap">
+        SELECT *
+        FROM boards
+        WHERE id = #{id}
+    </select>
+
+    <!-- 자동 증가된 boards의 no를 Boards객체의 no 변수에 넣어준다 -->
+    <insert id="insert" parameterType="Boards" useGeneratedKeys="true" keyProperty="no">
         INSERT INTO boards (id, title, writer, content)
         VALUES (#{id}, #{title}, #{writer}, #{content} )
     </insert>
 
     <update id="update">
+        UPDATE boards
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="writer != null">
+                writer = #{writer},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+                updated_at = now()
+        </set>
+        WHERE no = #{no}
+    </update>
+
+    <update id="updateById">
         UPDATE boards
         <set>
             <if test="title != null">
@@ -44,5 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE no = #{no}
     </delete>
 
-    
+    <delete id="deleteById">
+        DELETE FROM boards
+        WHERE id = #{id}
+    </delete>
+
 </mapper>

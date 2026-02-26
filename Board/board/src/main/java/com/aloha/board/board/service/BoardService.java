@@ -15,5 +15,11 @@ public interface BoardService {
     public boolean update (Boards board);
 
     public boolean delete (Long no);
+
+    public Boards selectById(String id);
+
+    public boolean updateById(Boards board);
+
+    public boolean deleteById(String id);
     
 }

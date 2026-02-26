@@ -37,6 +37,8 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    // 💫 sp-crud
+
     @GetMapping()
     public ResponseEntity<?> getAll() {
         try {
@@ -78,6 +80,45 @@ public class BoardController {
     public ResponseEntity<?> update(@RequestBody Boards board) {
         try {
             boolean result = boardService.update(board);
+            if (result)
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            else
+                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOneById(@PathVariable("id") String id) {
+        try {
+            Boards board = boardService.selectById(id);
+            if (id == null || board == null) {
+                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(board, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateById(@RequestBody Boards board) {
+        try {
+            boolean result = boardService.updateById(board);
+            if (result)
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            else
+                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> destroyById(@PathVariable("id") String id) {
+        try {
+            boolean result = boardService.deleteById(id);
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             else
