@@ -18,6 +18,21 @@
     <collection property="fileList" column="id" ofType="Files" select="fileList"></collection>
   </resultMap>
 
+  <!-- 메인 파일 조회 (association) -->
+  <select id="selectMainFile" resultType="Files">
+    SELECT * FROM files
+    WHERE p_id = #{id}
+      AND type = 'MAIN'
+    LIMIT 0, 1
+  </select>
+
+  <!-- 첨부파일 목록 (collection) -->
+  <select id="fileList" resultType="Files">
+    SELECT * FROM files
+    WHERE p_id = #{id}
+    ORDER BY created_at DESC
+  </select>
+
   <select id="list" resultMap="BoardMap">
     SELECT * FROM boards ORDER BY no DESC
   </select>
