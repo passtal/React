@@ -49,7 +49,7 @@ const FileItem = ({ file, onDownload, onDelete, selectable, checked, onCheck }) 
                 title='다운로드'
                 onClick={() => onDownload(file.id, file.originName)}
             >
-                <Download size={15}/>
+                <Download size={16}/>
             </button>
             <button
                 type='button'
@@ -57,7 +57,7 @@ const FileItem = ({ file, onDownload, onDelete, selectable, checked, onCheck }) 
                 title='삭제'
                 onClick={() => onDelete(file.id)}
             >
-                <Trash2 size={15}/>
+                <Trash2 size={16}/>
             </button>
         </div>
     </div>

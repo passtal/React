@@ -12,7 +12,7 @@ const useBoard = (id) => {
     })
 
     return {
-        board : data ?? {},
+        board : data?.board ?? {},
         fileList : data?.fileList ?? [],
         isLoading,
         isError,

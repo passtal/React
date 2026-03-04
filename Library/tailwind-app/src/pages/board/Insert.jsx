@@ -2,8 +2,15 @@ import React, { useRef, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ImageIcon, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useBoardMutations } from '../../hooks/useBoardMutations'
 
 const Insert = () => {
+
+  const navigate = useNavigate()
+  const contentRef = useRef('')
+  const { insertBoard, isInserting } = useBoardMutations()
 
   const [preview, setPreview] = useState(null)
   const fileInputRef = useRef(null)
@@ -22,13 +29,33 @@ const Insert = () => {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
+  const {
+    register,
+    handleSubmit,
+    formState : {errors}
+  } = useForm()
+
+  const onSubmit = (data) => {
+    const formData = new FormData()
+    formData.append('title', data.title)
+    formData.append('writer', data.writer)
+    formData.append('content', contentRef.current)
+
+    // 메인 파일
+    if (fileInputRef.current?.files[0]) {
+      formData.append('mainFile', fileInputRef.current.files[0])
+    }
+
+    insertBoard(formData, { 'Content-Type' : 'multipart/form-data' })
+  }
+
   const inputClass = 
     ` w-full px-3 py-2 text-sm border border-gray-200 rounded outline-none
     focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition bg-white
     `
 
   return (
-    <form noValidate>
+    <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <div className='flex items-center justify-center mb-5'>
             <h1 className='text-xl font-semibold text-gray-900 text-center'>글쓰기</h1>
         </div>
@@ -43,8 +70,13 @@ const Insert = () => {
                     <input
                         placeholder='제목을 입력해주세요'
                         className={inputClass}
+                        {...register('title', { required : '제목을 입력해주세요.' })}
                     />
-                    <p className='mt-1 text-xs text-red-500'>유효한 값을 입력하세요.</p>
+                    {
+                        errors.title && (
+                            <p className='mt-1 text-xs text-red-500'>{errors.title.message}</p>
+                        )
+                    }
                 </div>
             </div>
 
@@ -57,8 +89,13 @@ const Insert = () => {
                     <input
                         placeholder='작성자를 입력해주세요'
                         className={inputClass}
+                        {...register('writer', { required : '작성자를 입력해주세요.' })}
                     />
-                    <p className='mt-1 text-xs text-red-500'>유효한 값을 입력하세요.</p>
+                    {
+                        errors.writer && (
+                            <p className='mt-1 text-xs text-red-500'>{errors.writer.message}</p>
+                        )
+                    }
                 </div>
             </div>
 
@@ -78,6 +115,9 @@ const Insert = () => {
                         'link', 'imageUpload', 'mediaEmbed', '|',
                         'blockQuote', 'code',
                     ],
+                }}
+                onChange={(_, editor) => {
+                    contentRef.current = editor.getData()
                 }}
                 />
             </div>
@@ -143,10 +183,11 @@ const Insert = () => {
             </button>
             <button
                 type='submit'
+                disabled={isInserting}
                 className='px-4 py-2 text-sm font-medium text-gray-700 bg-blue-500
                     rounded-lg hover:bg-blue-600 transition-colors'
             >
-                저장
+                {isInserting ? '저장 중 ...' : '저장'}
             </button>
         </div>
     </form>
