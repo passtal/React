@@ -100,8 +100,11 @@ public class BoardController {
   public ResponseEntity<?> createMultipartForm(Boards board) {
     try {
       boolean result = boardService.insert(board);
-      if( result )
+      if( result ) {
+        board.setMainFile(null);
+        board.setFiles(null);
         return new ResponseEntity<>(board, HttpStatus.CREATED);
+      }
       else 
         return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
     } catch (Exception e) {

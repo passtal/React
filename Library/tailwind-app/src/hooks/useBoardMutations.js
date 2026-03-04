@@ -30,15 +30,29 @@ export const useBoardMutations = (id) => {
 
         // onSuccess : 요청 성공 시 실행되는 콜백 함수
         onSuccess : async () => {
-            queryClient.invalidateQueries({ queryKey : ['board'] })
+            // invalidateQueries() : queryKey 를 지정하여 캐시를 만료시키는 함수
+            queryClient.invalidateQueries({ queryKey : ['boards'] })
             // alert('게시글 등록이 완료되었습니다.')
             $alert('등록 성공', '게시글 등록이 완료되었습니다.', 'success')
             navigate('/boards')
         }
     })
 
+    // 글 수정
+    const updateMutation = useMutation({
+        mutationFn : ({ data, headers }) => boardsApi.update(data, headers),
+        onSuccess : async () => {
+            queryClient.invalidateQueries({ queryKey : ['boards'] })
+            queryClient.invalidateQueries({ queryKey : ['board', id] })
+            await $alert('수정 성공', '게시글이 수정되었습니다', 'success')
+            navigate('/boards')
+        }
+    })
+
     return {
         insertBoard : (data, headers) => insertMutation.mutate({data, headers}),
-        isInserting : insertMutation.isPending
+        updateBoard : (data, headers) => updateMutation.mutate({data, headers}),
+        isInserting : insertMutation.isPending,
+        isUpdating : updateMutation.isPending
     }
 }
