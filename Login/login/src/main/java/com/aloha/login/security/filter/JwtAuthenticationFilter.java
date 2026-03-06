@@ -12,6 +12,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.aloha.login.domain.CustomUser;
+import com.aloha.login.domain.Users;
 import com.aloha.login.security.constants.SecurityConstants;
 import com.aloha.login.security.provider.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
