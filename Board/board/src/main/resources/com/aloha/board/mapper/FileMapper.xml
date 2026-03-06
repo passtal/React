@@ -43,7 +43,7 @@
     <set>
       <if test="type != null"> type = #{type}, </if>
       <if test="seq != null"> seq = #{seq}, </if>
-      <if test="pId != null"> pId = #{pId}, </if>
+      <if test="pId != null"> p_id = #{pId}, </if>
       <if test="fileName != null"> file_name = #{fileName}, </if>
       <if test="originName != null"> origin_name = #{originName}, </if>
       <if test="filePath != null"> file_path = #{filePath}, </if>
