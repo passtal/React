@@ -17,3 +17,11 @@ CREATE TABLE `user_auth` (
     username    VARCHAR(100) NOT NULL COMMENT "아이디",
     auth        VARCHAR(100) NOT NULL COMMENT "권한"
 ) COMMENT "회원권한";
+
+-- 관리자 권한 계정
+INSERT INTO `users` (id, username, password, name, email)
+VALUES (UUID(), 'admin', '$2a$10$CNcBaLcB7YOpNNCL8pyipOgtbDGBjC02JKVuKiPWGNXXqwdfZy/Qu', '관리자', 'admin@naver.com');
+
+-- 권한 부여
+INSERT INTO `user_auth` (username, auth)
+VALUES ('admin', 'ROLE_USER'), ('admin', 'ROLE_ADMIN');

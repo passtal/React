@@ -9,19 +9,31 @@ import Join from './pages/Join'
 import User from './pages/User'
 import About from './pages/About'
 import Admin from './pages/Admin'
+import LoginContextProvider from './contexts/LoginContextProvider'
+import ProtectedRoute from './components/common/ProtectedRoute'
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/join' element={<Join />}></Route>
-        <Route path='/user' element={<User />}></Route>
-        <Route path='/about' element={<About />}></Route>
-        <Route path='/admin' element={<Admin />}></Route>
-      </Routes>
+      <LoginContextProvider>
+        <Routes>
+          <Route path='/' element={<Home />}></Route>
+          <Route path='/login' element={<Login />}></Route>
+          <Route path='/join' element={<Join />}></Route>
+          <Route path='/user' element={
+            <ProtectedRoute roles={['ROLE_USER']}>
+              <User />
+            </ProtectedRoute>
+            }></Route>
+          <Route path='/about' element={<About />}></Route>
+          <Route path='/admin' element={
+            <ProtectedRoute roles={['ROLE_ADMIN']}>
+              <Admin />
+            </ProtectedRoute>
+            }></Route>
+        </Routes>
+      </LoginContextProvider>
     </BrowserRouter>
   )
 }
